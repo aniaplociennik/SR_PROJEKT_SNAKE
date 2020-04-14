@@ -16,14 +16,11 @@
   *
   ******************************************************************************
   */
-#define SPEED_VALUE_MS 1000
-#define SNAKE_LIMIT 50
-#define SNAKE_INIT_SIZE 10
-#define SPEED_INCREASE_STEPS_CNT 1
-#define SPEED_LIMIT 10
+
+#define SNAKE_LIMIT 40
+#define SNAKE_INIT_SIZE 5
 #define SNAKE_RAD 2//Promien czesci weza
 
-#define MOVE_MARGIN 15
 #define SNAKE_START_X_POSITION 50
 #define SNAKE_START_Y_POSITION 40
 #define SNAKE_STEP 2*SNAKE_RAD//Do rysowania kolejnych cześci weza(2 x promien)
@@ -128,7 +125,14 @@ int main(void)
   //Uruchomienie przetwornika w trybie DMA
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)Joystick, 2);//Rzutowanie na 32-bitowego inta, aby nie było warninga
   ssd1331_init();
-  ssd1331_clear_screen(BLACK);
+  ssd1331_clear_screen(GREEN_BACKGROUND);
+      	ssd1331_draw_circle(37,23,SNAKE_RAD, GREEN_SNAKE);
+      	ssd1331_draw_circle(41,23,SNAKE_RAD, GREEN_SNAKE);
+      	ssd1331_draw_circle(45,23,SNAKE_RAD, GREEN_SNAKE);
+      	ssd1331_draw_circle(49,23,SNAKE_RAD, GREEN_SNAKE);
+      	ssd1331_draw_circle(53,23,SNAKE_RAD, YELLOW);
+      	ssd1331_draw_circle(37,35,SNAKE_RAD, RED);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
