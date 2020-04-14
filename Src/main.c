@@ -27,7 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "SSD1331.h" //biblioteka do wyswietlacza OLED
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,6 +95,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
   //Uruchomienie przetwornika w trybie DMA
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)Joystick, 2);//Rzutowanie na 32-bitowego inta, aby nie było warninga
+  ssd1331_init();
+  ssd1331_clear_screen(BLACK);
+  ssd1331_display_string(0, 0, "Hello World!", FONT_1608, GREEN);
   /* USER CODE END 2 */
 
   /* Infinite loop */
