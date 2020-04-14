@@ -16,6 +16,17 @@
   *
   ******************************************************************************
   */
+#define SPEED_VALUE_MS 1000
+#define SNAKE_LIMIT 50
+#define SNAKE_INIT_SIZE 10
+#define SPEED_INCREASE_STEPS_CNT 1
+#define SPEED_LIMIT 10
+#define SNAKE_RAD 2//Promien czesci weza
+
+#define MOVE_MARGIN 15
+#define SNAKE_START_X_POSITION 50
+#define SNAKE_START_Y_POSITION 40
+#define SNAKE_STEP 2*SNAKE_RAD//Do rysowania kolejnych cześci weza(2 x promien)
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -28,11 +39,31 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SSD1331.h" //biblioteka do wyswietlacza OLED
+#include <stdio.h>
+#include <stdlib.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+//Struktura wyliczeniowa do poruszania sie weza
+enum
+{
+    left,
+    right,
+    up,
+    down,
+};
+//Struktura odpowiadajaca polozeniu na ekranie (wspolrzedne x i y ekranu -> piksele)
+typedef struct _Cell{
+	uint8_t x,y;
+}Cell;
 
+//Struktura odpowiadajaca za weza
+typedef struct _Snake{
+	Cell snakeParts[SNAKE_LIMIT];
+	Cell head;
+	uint8_t size;
+}Snake;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -48,6 +79,7 @@
 
 /* USER CODE BEGIN PV */
 uint16_t Joystick[2];//Joystick[0]->Os Y, Joystick[1]->Os X
+static Snake snake;//Stworzenie obiektu typu "Snake"
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -97,7 +129,6 @@ int main(void)
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)Joystick, 2);//Rzutowanie na 32-bitowego inta, aby nie było warninga
   ssd1331_init();
   ssd1331_clear_screen(BLACK);
-  ssd1331_display_string(0, 0, "Hello World!", FONT_1608, GREEN);
   /* USER CODE END 2 */
 
   /* Infinite loop */
