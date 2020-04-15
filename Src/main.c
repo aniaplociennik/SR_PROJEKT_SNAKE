@@ -87,7 +87,22 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+//Funkcja inicjalizujaca oraz wyswietlajaca weza na ekranie
+void initSnake(void)
+{
+	uint8_t i;
+	snake.size = SNAKE_INIT_SIZE;
+	snake.head.x = SNAKE_START_X_POSITION;
+	snake.head.y = SNAKE_START_Y_POSITION;
+	//Rysuj glowe
+	ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
+	for(i=1;i<snake.size;i++)
+	{
+		snake.snakeParts[i].x = SNAKE_START_X_POSITION + (i*SNAKE_STEP);
+		snake.snakeParts[i].y = SNAKE_START_Y_POSITION;
+		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -126,13 +141,15 @@ int main(void)
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)Joystick, 2);//Rzutowanie na 32-bitowego inta, aby nie było warninga
   ssd1331_init();
   ssd1331_clear_screen(GREEN_BACKGROUND);
-      	ssd1331_draw_circle(37,23,SNAKE_RAD, GREEN_SNAKE);
-      	ssd1331_draw_circle(41,23,SNAKE_RAD, GREEN_SNAKE);
-      	ssd1331_draw_circle(45,23,SNAKE_RAD, GREEN_SNAKE);
-      	ssd1331_draw_circle(49,23,SNAKE_RAD, GREEN_SNAKE);
-      	ssd1331_draw_circle(53,23,SNAKE_RAD, YELLOW);
-      	ssd1331_draw_circle(37,35,SNAKE_RAD, RED);
-
+  /*
+  ssd1331_draw_circle(37,23,SNAKE_RAD, GREEN_SNAKE);
+  ssd1331_draw_circle(41,23,SNAKE_RAD, GREEN_SNAKE);
+  ssd1331_draw_circle(45,23,SNAKE_RAD, GREEN_SNAKE);
+  ssd1331_draw_circle(49,23,SNAKE_RAD, GREEN_SNAKE);
+  ssd1331_draw_circle(53,23,SNAKE_RAD, YELLOW);
+  ssd1331_draw_circle(37,35,SNAKE_RAD, RED);
+	*/
+  initSnake();
   /* USER CODE END 2 */
 
   /* Infinite loop */
