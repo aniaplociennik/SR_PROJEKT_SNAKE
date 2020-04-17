@@ -117,10 +117,29 @@ void initSnake(void)
 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
 	}
 }
-static void MoveSnake(uint8_t direction)
+//Poprawiona wersja algorytmu poruszania cialo za glowa
+void MoveSnake(uint8_t direction)
 {
 	uint8_t i, partsCount = snake.size,pom_x,pom_y;
-
+	pom_x=snake.head.x;
+	pom_y=snake.head.y;
+	//ssd1331_clear_screen(BLACK);
+	snake.snakeParts[0].x=pom_x;
+	snake.snakeParts[0].y=pom_y;
+	ssd1331_draw_circle(snake.snakeParts[partsCount-1].x,snake.snakeParts[partsCount-1].y,SNAKE_RAD, GREEN_BACKGROUND);
+	//ssd1331_fill_rect(snake.snakeParts[partsCount-1].x,snake.snakeParts[partsCount-1].y,SNAKE_STEP+1,SNAKE_STEP+1,BLACK);
+	for(i=partsCount-1;i>0;i--)
+	{
+			snake.snakeParts[i].x=snake.snakeParts[i-1].x;
+			snake.snakeParts[i].y=snake.snakeParts[i-1].y;
+	}
+    /*
+	for(i=partsCount-1;i>0;i--)
+	{
+		snake.snakeParts[i].x=snake.snakeParts[i-1].x;
+		snake.snakeParts[i].y=snake.snakeParts[i-1].y;
+	}
+	ssd1331_draw_circle(snake.snakeParts[partsCount-1].x,snake.snakeParts[partsCount-1].y,BLUE);*/
 	switch (direction)
 	{
 	    case left:
@@ -160,8 +179,8 @@ static void MoveSnake(uint8_t direction)
 	   	 	}
 	   	break;
 	}
-}
 
+}
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == Button_Pin)
