@@ -242,23 +242,39 @@ int main(void)
 	  //Jesli joystick do gory
 	  if(Joystick[0]>Thresholdup)
 	  {
-	  	  MoveSnake(up);//jedz do gory
-	  	  HAL_Delay(200);
+		  for(;;)
+	  	  {
+	  	  	  MoveSnake(up);//jedz do gory
+	  	  	  HAL_Delay(200);
+	  	  	  if(Joystick[0]<Thresholddown||Joystick[1]>Thresholdup||Joystick[1]<Thresholddown) break;
+	  	  }
 	  }//Joystic wychylony w dol
 	  else if(Joystick[0]<Thresholddown)
 	  {
-	  	  MoveSnake(down);//zawroc w dol
-	  	  HAL_Delay(200);
+		  for(;;)
+		  {
+			  MoveSnake(down);//zawroc w dol
+			  HAL_Delay(200);
+			  if(Joystick[0]>Thresholdup||Joystick[1]>Thresholdup||Joystick[1]<Thresholddown) break;
+		  }
 	  }//Joystic wychylony w prawo
 	  else if(Joystick[1]>Thresholdup)
 	  {
-	  	  MoveSnake(right);//skrec w prawo
-	  	  HAL_Delay(200);
+		  for(;;)
+		  {
+	  	  	  MoveSnake(right);//skrec w prawo
+	  	  	  HAL_Delay(200);
+	  	  	  if(Joystick[0]>Thresholdup||Joystick[0]<Thresholddown||Joystick[1]<Thresholddown) break;
+		  }
 	  }//Joystic wychylony w lewo
 	  else if(Joystick[1]<Thresholddown)
 	  {
-	  	  MoveSnake(left);//skrec w lewo
-	  	  HAL_Delay(200);
+		  for(;;)
+		  {
+			  MoveSnake(left);//skrec w lewo
+			  HAL_Delay(200);
+			  if(Joystick[0]>Thresholdup||Joystick[0]<Thresholddown||Joystick[1]>Thresholdup) break;
+		  }
 	  }
 
     /* USER CODE END WHILE */
