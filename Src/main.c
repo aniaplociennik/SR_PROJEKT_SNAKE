@@ -77,6 +77,8 @@ typedef struct _Snake{
 /* USER CODE BEGIN PV */
 uint16_t Joystick[2];//Joystick[0]->Os Y, Joystick[1]->Os X
 static Snake snake;//Stworzenie obiektu typu "Snake"
+const uint16_t Thresholdup = 4000;//Gorny prog przetwornika
+const uint8_t Thresholddown = 100;//Dolny prog przetwornika
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -230,19 +232,35 @@ int main(void)
   /* USER CODE BEGIN 2 */
   //Uruchomienie przetwornika w trybie DMA
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)Joystick, 2);//Rzutowanie na 32-bitowego inta, aby nie było warninga
-  ssd1331_init();
-  ssd1331_clear_screen(GREEN_BACKGROUND);
-
-  //initPlay();
-  initSnake();
+  initPlay(); //Inicjalizacja ekranu startowego
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  MoveSnake(up);
-	  HAL_Delay(500);
+	  //Jesli joystick do gory
+	  if(Joystick[0]>Thresholdup)
+	  {
+	  	  MoveSnake(up);//jedz do gory
+	  	  HAL_Delay(200);
+	  }//Joystic wychylony w dol
+	  else if(Joystick[0]<Thresholddown)
+	  {
+	  	  MoveSnake(down);//zawroc w dol
+	  	  HAL_Delay(200);
+	  }//Joystic wychylony w prawo
+	  else if(Joystick[1]>Thresholdup)
+	  {
+	  	  MoveSnake(right);//skrec w prawo
+	  	  HAL_Delay(200);
+	  }//Joystic wychylony w lewo
+	  else if(Joystick[1]<Thresholddown)
+	  {
+	  	  MoveSnake(left);//skrec w lewo
+	  	  HAL_Delay(200);
+	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
