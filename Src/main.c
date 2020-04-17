@@ -82,11 +82,6 @@ static Snake snake;//Stworzenie obiektu typu "Snake"
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
 void initPlay(void)
 {	ssd1331_init();
     ssd1331_clear_screen(GREEN_BACKGROUND);
@@ -122,6 +117,19 @@ void initSnake(void)
 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
 	}
 }
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == Button_Pin)
+	{
+		ssd1331_clear_screen(GREEN_BACKGROUND);
+		initSnake();
+	}
+}
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
 /* USER CODE END 0 */
 
 /**
