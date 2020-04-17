@@ -117,6 +117,51 @@ void initSnake(void)
 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
 	}
 }
+static void MoveSnake(uint8_t direction)
+{
+	uint8_t i, partsCount = snake.size,pom_x,pom_y;
+
+	switch (direction)
+	{
+	    case left:
+	    	snake.head.x -= SNAKE_STEP;
+	    	ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
+	    	for(i=1;i<partsCount;i++)
+	    	{
+	    		//snake.snakeParts[i].x -= SNAKE_STEP;
+	    		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD,GREEN_SNAKE);
+	    	}
+	    break;
+	    case right:
+	   	    snake.head.x += SNAKE_STEP;
+	   	    ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
+	   	 	for(i=1;i<partsCount;i++)
+	   	 	{
+	   	 		//snake.snakeParts[i].x += SNAKE_STEP;
+	   	 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD,GREEN_SNAKE);
+	   	 	}
+	   	break;
+	    case up:
+	   	    snake.head.y -= SNAKE_STEP;
+	   	    ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
+	   	 	for(i=1;i<partsCount;i++)
+	   	 	{
+	   	 		//snake.snakeParts[i].y -= SNAKE_STEP;
+	   	 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD,GREEN_SNAKE);
+	   	 	}
+	   	break;
+	    case down:
+	   	    snake.head.y += SNAKE_STEP;
+	   	    ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
+	   	 	for(i=1;i<partsCount;i++)
+	   	 	{
+	   	 		//snake.snakeParts[i].y += SNAKE_STEP;
+	   	 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD,GREEN_SNAKE);
+	   	 	}
+	   	break;
+	}
+}
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == Button_Pin)
@@ -168,22 +213,17 @@ int main(void)
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)Joystick, 2);//Rzutowanie na 32-bitowego inta, aby nie było warninga
   ssd1331_init();
   ssd1331_clear_screen(GREEN_BACKGROUND);
-  /*
-  ssd1331_draw_circle(37,23,SNAKE_RAD, GREEN_SNAKE);
-  ssd1331_draw_circle(41,23,SNAKE_RAD, GREEN_SNAKE);
-  ssd1331_draw_circle(45,23,SNAKE_RAD, GREEN_SNAKE);
-  ssd1331_draw_circle(49,23,SNAKE_RAD, GREEN_SNAKE);
-  ssd1331_draw_circle(53,23,SNAKE_RAD, YELLOW);
-  ssd1331_draw_circle(37,35,SNAKE_RAD, RED);
-	*/
-  initPlay();
-  //initSnake();
+
+  //initPlay();
+  initSnake();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  MoveSnake(up);
+	  HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
