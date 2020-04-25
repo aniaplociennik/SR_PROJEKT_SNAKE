@@ -34,4 +34,6 @@ void MoveSnake(uint8_t direction);
 //Funkcja sprawdza czy nastpila kolizja glowy weza z reszta jego ciala-> zwraca "true" jesli nastapila kolizja
 bool checkCollision();
 
+void omnomnom();
+
 #endif// SNAKE_H

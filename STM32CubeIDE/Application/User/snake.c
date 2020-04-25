@@ -3,6 +3,13 @@
 
 static Snake snake;//Stworzenie obiektu typu "Snake"
 
+//Stworzenie jabłuszka
+static Cell Apple =
+		{
+				.x = 5,
+				.y = 10,
+		};
+
 //Funkcja inicjalizujaca oraz wyswietlajaca weza na ekranie
 void initSnake(void)
 {
@@ -18,6 +25,7 @@ void initSnake(void)
 		snake.snakeParts[i].y = SNAKE_START_Y_POSITION;
 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
 	}
+	ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,RED);
 }
 //Fukcja odpowiada za poruszanie wezem
 void MoveSnake(uint8_t direction)
@@ -75,6 +83,8 @@ void MoveSnake(uint8_t direction)
 		break;
 	}
 
+	omnomnom();
+
 }
 //Funkcja sprawdza czy nastpila kolizja glowy weza z reszta jego ciala-> zwraca "true" jesli nastapila kolizja
 bool checkCollision(){
@@ -86,4 +96,17 @@ bool checkCollision(){
 		}
 	}
 return false;
+}
+
+//Funkcja sprawcza czy głowa weza najechala na jabluszko, jeśli tak powieksza weza i rysuje nowe jabluszko
+void omnomnom()
+{
+	if((Apple.x-SNAKE_STEP<snake.head.x)&&(snake.head.x<Apple.x+SNAKE_STEP)
+			&&(Apple.y-SNAKE_STEP<snake.head.y)&&(snake.head.y<Apple.y+SNAKE_STEP))
+	{
+		ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,GREEN_BACKGROUND);
+			Apple.x = rand()%80;
+			Apple.y = rand()%60;
+			ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,RED);
+	}
 }
