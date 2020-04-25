@@ -83,7 +83,7 @@ bool IsGameOver()
 	//Sprawdza funkcje odpowiadajaca za kolizje weza, funkcja zwraca "true" jesli nastapilo zderzenie weza
 	if(checkCollision()){
 		ssd1331_clear_screen(BLACK);
-		ssd1331_display_string(20, 10, "GAME OVER!!!", FONT_1206, GREEN);
+		ssd1331_display_string(15, 20, "GAME OVER!!!", FONT_1206, WHITE);
 		return true;
 	}
 	else
@@ -95,7 +95,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
 		ssd1331_clear_screen(GREEN_BACKGROUND);
 		initSnake();
-		printf("START! Rusz joystickiem.\r\n");
+		printf("START! \nMove joystick.\r\n");
 	}
 }
 
@@ -149,7 +149,7 @@ int main(void)
   //Uruchomienie przetwornika w trybie DMA
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)Joystick, 2);//Rzutowanie na 32-bitowego inta, aby nie było warninga
   initPlay(); //Inicjalizacja ekranu startowego
-  printf("Nacisnij niebieski przycisk!. \r\n");
+  printf("Push blue button to start!. \r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -203,7 +203,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
   }
-  printf("Przegrałeś! KONIEC GRY!!!\r\n");
+  printf("You've lost! GAME OVER!!!\r\n");
   /* USER CODE END 3 */
 }
 
