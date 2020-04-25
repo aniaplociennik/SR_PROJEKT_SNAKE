@@ -83,13 +83,22 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
 		ssd1331_clear_screen(GREEN_BACKGROUND);
 		initSnake();
+		printf("START! Rusz joystickiem.\r\n");
 	}
 }
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int _write(int file, char *ptr, int len)
+{
+	int i;
+	for(i=0; i<len; i++)
+	{
+		ITM_SendChar(*ptr++);
+	}
+	return len;
+}
 /* USER CODE END 0 */
 
 /**
@@ -127,6 +136,7 @@ int main(void)
   //Uruchomienie przetwornika w trybie DMA
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)Joystick, 2);//Rzutowanie na 32-bitowego inta, aby nie było warninga
   initPlay(); //Inicjalizacja ekranu startowego
+  printf("Nacisnij niebieski przycisk!. \r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -174,7 +184,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
   }
+  printf("Przegrałeś! KONIEC GRY!!!\r\n");
   /* USER CODE END 3 */
 }
 
