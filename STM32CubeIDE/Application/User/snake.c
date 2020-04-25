@@ -105,8 +105,16 @@ void omnomnom()
 			&&(Apple.y-SNAKE_STEP<snake.head.y)&&(snake.head.y<Apple.y+SNAKE_STEP))
 	{
 		ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,GREEN_BACKGROUND);
-			Apple.x = rand()%80;
-			Apple.y = rand()%60;
+		snake.size++;
+					Apple.x = rand()%80;
+					Apple.y = rand()%60;
+					for(int i=1; i<snake.size; i++)
+					{
+						if((Apple.x-SNAKE_STEP<snake.snakeParts[i].x)&&(snake.snakeParts[i].x<Apple.x+SNAKE_STEP) //gdyby jabluszko mialo byc na ogonie weza nowe wartosci wspolrzednych
+								&&(Apple.y-SNAKE_STEP<snake.snakeParts[i].y)&&(snake.snakeParts[i].y<Apple.y+SNAKE_STEP))
+										{Apple.x = rand()%80;
+										Apple.y = rand()%60;}
+					}
 			ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,RED);
 	}
 }
