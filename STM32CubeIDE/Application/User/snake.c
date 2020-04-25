@@ -28,6 +28,8 @@ void initSnake(void)
 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
 	}
 	ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,RED);
+	ssd1331_display_string(3, 54, "Points:", FONT_1206, GREEN);
+	ssd1331_display_num(31, 54, 0, sizeof(int), FONT_1206, WHITE);
 }
 //Fukcja odpowiada za poruszanie wezem
 void MoveSnake(uint8_t direction)
@@ -109,17 +111,22 @@ void omnomnom()
 			&&(Apple.y-SNAKE_STEP<snake.head.y)&&(snake.head.y<Apple.y+SNAKE_STEP))
 	{
 		ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,GREEN_BACKGROUND);
+		points= snake.size-SNAKE_INIT_SIZE;
+		ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, GREEN_BACKGROUND);
 		snake.size++;
+		points= snake.size-SNAKE_INIT_SIZE;
 		Apple.x = rand()%80;
-		Apple.y = rand()%60;
+		Apple.y = rand()%54;
 		for(int i=1; i<snake.size; i++)
 		{
 			if((Apple.x-SNAKE_STEP<snake.snakeParts[i].x)&&(snake.snakeParts[i].x<Apple.x+SNAKE_STEP) //gdyby jabluszko mialo byc na ogonie weza nowe wartosci wspolrzednych
 				&&(Apple.y-SNAKE_STEP<snake.snakeParts[i].y)&&(snake.snakeParts[i].y<Apple.y+SNAKE_STEP))
 			{Apple.x = rand()%80;
-			Apple.y = rand()%60;}
+			Apple.y = rand()%54;}
 		}
 		ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,RED);
+		//ssd1331_display_string(3, 54, "Points:", FONT_1206, GREEN);
+		ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, WHITE);
 		printf("You ate Apple! \r\n");
 	}
 }
