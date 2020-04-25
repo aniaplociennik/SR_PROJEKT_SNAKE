@@ -19,6 +19,7 @@ void initSnake(void)
 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
 	}
 }
+//Fukcja odpowiada za poruszanie wezem
 void MoveSnake(uint8_t direction)
 {
 	uint8_t i, partsCount = snake.size,pom_x,pom_y;
@@ -74,4 +75,15 @@ void MoveSnake(uint8_t direction)
 		break;
 	}
 
+}
+//Funkcja sprawdza czy nastpila kolizja glowy weza z reszta jego ciala-> zwraca "true" jesli nastapila kolizja
+bool checkCollision(){
+	for(int i=1; i<snake.size; i++)
+	{
+		if((snake.snakeParts[i].x-SNAKE_STEP<snake.head.x)&&(snake.head.x<snake.snakeParts[i].x+SNAKE_STEP)
+			&&(snake.snakeParts[i].y-SNAKE_STEP<snake.head.y)&&(snake.head.y<snake.snakeParts[i].y+SNAKE_STEP)){
+			return true;
+		}
+	}
+return false;
 }

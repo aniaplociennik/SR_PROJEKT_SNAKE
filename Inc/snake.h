@@ -27,7 +27,11 @@ typedef struct _Snake{
 	uint8_t size;
 }Snake;
 
+//Funkcja inicjalizujaca oraz wyswietlajaca weza na ekranie
 void initSnake(void);
+//Fukcja odpowiada za poruszanie wezem
 void MoveSnake(uint8_t direction);
+//Funkcja sprawdza czy nastpila kolizja glowy weza z reszta jego ciala-> zwraca "true" jesli nastapila kolizja
+bool checkCollision();
 
 #endif// SNAKE_H

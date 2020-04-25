@@ -59,8 +59,8 @@ const uint8_t Thresholddown = 100;//Dolny prog przetwornika
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void initPlay(void)
-{	ssd1331_init();
-    ssd1331_clear_screen(GREEN_BACKGROUND);
+{		ssd1331_init();
+    	ssd1331_clear_screen(GREEN_BACKGROUND);
     	ssd1331_display_string(20, 0, "Sssnake", FONT_1608, GREEN);
     	ssd1331_draw_circle(37,23,SNAKE_RAD, GREEN_SNAKE);
     	ssd1331_draw_circle(41,23,SNAKE_RAD, GREEN_SNAKE);
@@ -77,6 +77,18 @@ void initPlay(void)
         ssd1331_display_string(20, 39, "Click blue", FONT_1206, GREEN);
         ssd1331_display_string(5, 51, "button to play", FONT_1206, GREEN);
 }
+//Funkcja sprawdza czy nastapila kolizja -> jesli tak wyswietla komunikat na ekranie i przerywa petle while
+bool IsGameOver()
+{
+	//Sprawdza funkcje odpowiadajaca za kolizje weza, funkcja zwraca "true" jesli nastapilo zderzenie weza
+	if(checkCollision()){
+		ssd1331_clear_screen(BLACK);
+		ssd1331_display_string(20, 10, "GAME OVER!!!", FONT_1206, GREEN);
+		return true;
+	}
+	else
+		return false;
+}
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == Button_Pin)
@@ -85,6 +97,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		initSnake();
 	}
 }
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -131,7 +144,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
+  while (!IsGameOver())
   {
 	  //Jesli joystick do gory
 	  if(Joystick[0]>Thresholdup)
@@ -141,6 +154,7 @@ int main(void)
 	  	  	  MoveSnake(up);//jedz do gory
 	  	  	  HAL_Delay(200);
 	  	  	  if(Joystick[0]<Thresholddown||Joystick[1]>Thresholdup||Joystick[1]<Thresholddown) break;
+	  	  	  if(IsGameOver()) break;
 	  	  }
 	  }//Joystic wychylony w dol
 	  else if(Joystick[0]<Thresholddown)
@@ -150,6 +164,7 @@ int main(void)
 			  MoveSnake(down);//zawroc w dol
 			  HAL_Delay(200);
 			  if(Joystick[0]>Thresholdup||Joystick[1]>Thresholdup||Joystick[1]<Thresholddown) break;
+			  if(IsGameOver()) break;
 		  }
 	  }//Joystic wychylony w prawo
 	  else if(Joystick[1]>Thresholdup)
@@ -159,6 +174,7 @@ int main(void)
 	  	  	  MoveSnake(right);//skrec w prawo
 	  	  	  HAL_Delay(200);
 	  	  	  if(Joystick[0]>Thresholdup||Joystick[0]<Thresholddown||Joystick[1]<Thresholddown) break;
+	  	  	  if(IsGameOver()) break;
 		  }
 	  }//Joystic wychylony w lewo
 	  else if(Joystick[1]<Thresholddown)
@@ -168,6 +184,7 @@ int main(void)
 			  MoveSnake(left);//skrec w lewo
 			  HAL_Delay(200);
 			  if(Joystick[0]>Thresholdup||Joystick[0]<Thresholddown||Joystick[1]>Thresholdup) break;
+			  if(IsGameOver()) break;
 		  }
 	  }
 
