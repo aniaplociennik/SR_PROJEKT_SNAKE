@@ -55,6 +55,8 @@ uint16_t Joystick[2];//Joystick[0]->Os Y, Joystick[1]->Os X
 const uint16_t Thresholdup = 4000;//Gorny prog przetwornika
 const uint8_t Thresholddown = 100;//Dolny prog przetwornika
 volatile int flag; //Domyslnie na 0 ustawiona
+uint8_t dir_flag = none; //zmienna przechowujaca kierunek poruszania
+// uint8_t dir_flag; //zmienna przechowujaca kierunek
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -160,64 +162,31 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim10);
   initPlay(); //Inicjalizacja ekranu startowego
   printf("Push blue button to start!. \r\n");
+  //dir_flag = none;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (!IsGameOver())
-  {
-	  //Jesli joystick do gory
-	  if(Joystick[0]>Thresholdup)
-	  {
-		  for(;;)
-	  	  {
-			  if(flag == 1){
-				  flag=0;
-		  	  	  MoveSnake(up);//jedz do gory
-		  	  	 // HAL_Delay(200);
-			  }
-	  	  	  if(Joystick[0]<Thresholddown||Joystick[1]>Thresholdup||Joystick[1]<Thresholddown) break;
-	  	  	  if(IsGameOver()) break;
-	  	  }
-	  }//Joystic wychylony w dol
-	  else if(Joystick[0]<Thresholddown)
-	  {
-		  for(;;)
-		  {
-			  if(flag == 1){
-				  flag=0;
-				  MoveSnake(down);//zawroc w dol
-				  //HAL_Delay(200);
-			  }
-			  if(Joystick[0]>Thresholdup||Joystick[1]>Thresholdup||Joystick[1]<Thresholddown) break;
-			  if(IsGameOver()) break;
-		  }
-	  }//Joystic wychylony w prawo
-	  else if(Joystick[1]>Thresholdup)
-	  {
-		  for(;;)
-		  {
-			  if(flag == 1){
-				  flag=0;
-				  MoveSnake(right);//skrec w prawo
-				  //HAL_Delay(200);
-			  }
-	  	  	  if(Joystick[0]>Thresholdup||Joystick[0]<Thresholddown||Joystick[1]<Thresholddown) break;
-	  	  	  if(IsGameOver()) break;
-		  }
-	  }//Joystic wychylony w lewo
-	  else if(Joystick[1]<Thresholddown)
-	  {
-		  for(;;)
-		  {
-			  if(flag == 1){
-				  flag=0;
-				  MoveSnake(left);//skrec w lewo
-				  //HAL_Delay(200);
-			  }
-			  if(Joystick[0]>Thresholdup||Joystick[0]<Thresholddown||Joystick[1]>Thresholdup) break;
-			  if(IsGameOver()) break;
-		  }
+
+ while (!IsGameOver())
+ {
+	  if(Joystick[0]>Thresholdup){//Jesli joystick do gory
+		  dir_flag=up;
+	  }
+	  else if(Joystick[0]<Thresholddown){//Joystic wychylony w dol
+		  dir_flag=down;
+	  }
+	  else if(Joystick[1]>Thresholdup){//Joystic wychylony w prawo
+		  dir_flag=right;
+	  }
+	  else if(Joystick[1]<Thresholddown){//Joystic wychylony w lewo
+		  dir_flag=left;
+	  }
+	  //Jesli timer sie przeterminowal (czestotliwosc 5HZ)
+	  if(flag == 1){
+		  flag=0;
+		  if(dir_flag != none)
+			  MoveSnake(dir_flag);
 	  }
 
     /* USER CODE END WHILE */

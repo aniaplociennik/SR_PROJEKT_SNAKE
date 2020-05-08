@@ -15,6 +15,7 @@ enum
     right,
     up,
     down,
+	none,
 };
 typedef struct _Cell{
 	uint8_t x,y;
