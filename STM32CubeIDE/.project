@@ -72,6 +72,11 @@
 			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/Src/stm32f4xx_it.c</locationURI>
 		</link>
 		<link>
+			<name>Application/User/tim.c</name>
+			<type>1</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/Src/tim.c</locationURI>
+		</link>
+		<link>
 			<name>Drivers/CMSIS/system_stm32f4xx.c</name>
 			<type>1</type>
 			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/Src/system_stm32f4xx.c</locationURI>

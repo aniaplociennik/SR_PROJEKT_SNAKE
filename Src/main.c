@@ -24,6 +24,7 @@
 #include "adc.h"
 #include "dma.h"
 #include "spi.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -53,6 +54,7 @@
 uint16_t Joystick[2];//Joystick[0]->Os Y, Joystick[1]->Os X
 const uint16_t Thresholdup = 4000;//Gorny prog przetwornika
 const uint8_t Thresholddown = 100;//Dolny prog przetwornika
+volatile int flag; //Domyslnie na 0 ustawiona
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -112,6 +114,12 @@ int _write(int file, char *ptr, int len)
 	}
 	return len;
 }
+//Callback do obslugi przerwania od timera10
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	if(htim == &htim10){
+		flag = 1;
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -145,9 +153,11 @@ int main(void)
   MX_DMA_Init();
   MX_ADC1_Init();
   MX_SPI1_Init();
+  MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
   //Uruchomienie przetwornika w trybie DMA
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)Joystick, 2);//Rzutowanie na 32-bitowego inta, aby nie było warninga
+  HAL_TIM_Base_Start_IT(&htim10);
   initPlay(); //Inicjalizacja ekranu startowego
   printf("Push blue button to start!. \r\n");
   /* USER CODE END 2 */
@@ -161,8 +171,11 @@ int main(void)
 	  {
 		  for(;;)
 	  	  {
-	  	  	  MoveSnake(up);//jedz do gory
-	  	  	  HAL_Delay(200);
+			  if(flag == 1){
+				  flag=0;
+		  	  	  MoveSnake(up);//jedz do gory
+		  	  	 // HAL_Delay(200);
+			  }
 	  	  	  if(Joystick[0]<Thresholddown||Joystick[1]>Thresholdup||Joystick[1]<Thresholddown) break;
 	  	  	  if(IsGameOver()) break;
 	  	  }
@@ -171,8 +184,11 @@ int main(void)
 	  {
 		  for(;;)
 		  {
-			  MoveSnake(down);//zawroc w dol
-			  HAL_Delay(200);
+			  if(flag == 1){
+				  flag=0;
+				  MoveSnake(down);//zawroc w dol
+				  //HAL_Delay(200);
+			  }
 			  if(Joystick[0]>Thresholdup||Joystick[1]>Thresholdup||Joystick[1]<Thresholddown) break;
 			  if(IsGameOver()) break;
 		  }
@@ -181,8 +197,11 @@ int main(void)
 	  {
 		  for(;;)
 		  {
-	  	  	  MoveSnake(right);//skrec w prawo
-	  	  	  HAL_Delay(200);
+			  if(flag == 1){
+				  flag=0;
+				  MoveSnake(right);//skrec w prawo
+				  //HAL_Delay(200);
+			  }
 	  	  	  if(Joystick[0]>Thresholdup||Joystick[0]<Thresholddown||Joystick[1]<Thresholddown) break;
 	  	  	  if(IsGameOver()) break;
 		  }
@@ -191,8 +210,11 @@ int main(void)
 	  {
 		  for(;;)
 		  {
-			  MoveSnake(left);//skrec w lewo
-			  HAL_Delay(200);
+			  if(flag == 1){
+				  flag=0;
+				  MoveSnake(left);//skrec w lewo
+				  //HAL_Delay(200);
+			  }
 			  if(Joystick[0]>Thresholdup||Joystick[0]<Thresholddown||Joystick[1]>Thresholdup) break;
 			  if(IsGameOver()) break;
 		  }
