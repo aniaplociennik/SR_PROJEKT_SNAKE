@@ -4,11 +4,10 @@
 static Snake snake;//Stworzenie obiektu typu "Snake"
 
 //Stworzenie jabłuszka
-static Cell Apple =
-		{
-				.x = 5,
-				.y = 10,
-		};
+static Cell Apple ={
+	.x = 5,
+	.y = 10,
+};
 
 int points;
 
@@ -37,11 +36,9 @@ void MoveSnake(uint8_t direction)
 	uint8_t i, partsCount = snake.size,pom_x,pom_y;
 	pom_x=snake.head.x;
 	pom_y=snake.head.y;
-	//ssd1331_clear_screen(BLACK);
 	snake.snakeParts[0].x=pom_x;
 	snake.snakeParts[0].y=pom_y;
 	ssd1331_draw_circle(snake.snakeParts[partsCount-1].x,snake.snakeParts[partsCount-1].y,SNAKE_RAD, GREEN_BACKGROUND);
-	//ssd1331_fill_rect(snake.snakeParts[partsCount-1].x,snake.snakeParts[partsCount-1].y,SNAKE_STEP+1,SNAKE_STEP+1,BLACK);
 	for(i=partsCount-1;i>0;i--)
 	{
 		snake.snakeParts[i].x=snake.snakeParts[i-1].x;
@@ -51,6 +48,7 @@ void MoveSnake(uint8_t direction)
 	{
 		case left:
 		    snake.head.x -= SNAKE_STEP;
+		    snake.head.x %= 96 + 65;//Jesli wyjedzie za lewa krawedz ekranu wyjedz prawa krawedzia ekranu [snake.head.x=127%96+65 = 96->prawa krawedz ekranu]
 		    ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
 		    for(i=1;i<partsCount;i++)
 		    {
@@ -60,6 +58,7 @@ void MoveSnake(uint8_t direction)
 		break;
 		case right:
 		   	 snake.head.x += SNAKE_STEP;
+		   	 snake.head.x %= 96;//Jesli wyjedzie za prawa krawedz ekranu wyjedz lewa krawedzia ekranu[snake.head.x=96%96 = 0->lewa krawedz ekranu]
 		   	 ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
 		   	 for(i=1;i<partsCount;i++)
 		   	 {
@@ -69,6 +68,7 @@ void MoveSnake(uint8_t direction)
 		break;
 		case up:
 		   	 snake.head.y -= SNAKE_STEP;
+		   	 snake.head.y %= 64 + 1;//Jesli wyjedzie za gorna krawedz ekranu wyjedz dolna krawedzia ekranu[snake.head.y=127%64+1 = 64->dolna krawedz ekranu]
 		   	 ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
 		   	 for(i=1;i<partsCount;i++)
 		   	 {
@@ -78,6 +78,7 @@ void MoveSnake(uint8_t direction)
 		break;
 		case down:
 			 snake.head.y += SNAKE_STEP;
+			 snake.head.y %= 64;//Jesli wyjedzie za dolna krawedz ekranu wyjedz gorna krawedzia ekranu[snake.head.y=64%64 = 0->gorna krawedz ekranu]
 		   	 ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
 		   	 for(i=1;i<partsCount;i++)
 		   	 {
