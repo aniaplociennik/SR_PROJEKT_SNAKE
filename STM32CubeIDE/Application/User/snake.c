@@ -27,6 +27,8 @@ void initSnake(void)
 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
 	}
 	ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,RED);
+	ssd1331_draw_line(0, 52, 95, 52, BLACK);
+	ssd1331_draw_line(0, 53, 95, 53, BLACK);
 	ssd1331_display_string(3, 54, "Points:", FONT_1206, GREEN);
 	ssd1331_display_num(31, 54, 0, sizeof(int), FONT_1206, WHITE);
 }
@@ -130,4 +132,9 @@ void omnomnom()
 		ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, WHITE);
 		printf("You ate Apple! \r\n");
 	}
+}
+
+int Points()
+{
+	return points;
 }

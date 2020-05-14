@@ -86,8 +86,13 @@ bool IsGameOver()
 {
 	//Sprawdza funkcje odpowiadajaca za kolizje weza, funkcja zwraca "true" jesli nastapilo zderzenie weza
 	if(checkCollision()){
-		ssd1331_clear_screen(BLACK);
-		ssd1331_display_string(15, 20, "GAME OVER!!!", FONT_1206, WHITE);
+		ssd1331_clear_screen(GREEN_BACKGROUND);
+		ssd1331_display_string(20, 10, "GAME OVER!", FONT_1206, WHITE);
+		ssd1331_display_string(8, 20, "You received", FONT_1206, WHITE);
+		ssd1331_display_string(30, 30, "points!", FONT_1206, WHITE);
+		int points=Points();
+		ssd1331_display_num(67, 20, points, sizeof(int), FONT_1206, WHITE);
+
 		return true;
 	}
 	else
