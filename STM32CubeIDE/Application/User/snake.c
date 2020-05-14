@@ -70,7 +70,7 @@ void MoveSnake(uint8_t direction)
 		break;
 		case up:
 		   	 snake.head.y -= SNAKE_STEP;
-		   	 snake.head.y %= 64 + 1;//Jesli wyjedzie za gorna krawedz ekranu wyjedz dolna krawedzia ekranu[snake.head.y=127%64+1 = 64->dolna krawedz ekranu]
+		   	 snake.head.y %= 52;//Jesli wyjedzie za gorna krawedz ekranu wyjedz dolna krawedzia ekranu[snake.head.y=127%64+1 = 64->dolna krawedz ekranu]
 		   	 ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
 		   	 for(i=1;i<partsCount;i++)
 		   	 {
@@ -80,7 +80,7 @@ void MoveSnake(uint8_t direction)
 		break;
 		case down:
 			 snake.head.y += SNAKE_STEP;
-			 snake.head.y %= 64;//Jesli wyjedzie za dolna krawedz ekranu wyjedz gorna krawedzia ekranu[snake.head.y=64%64 = 0->gorna krawedz ekranu]
+			 snake.head.y %= 52;//Jesli wyjedzie za dolna krawedz ekranu wyjedz gorna krawedzia ekranu[snake.head.y=64%64 = 0->gorna krawedz ekranu]
 		   	 ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
 		   	 for(i=1;i<partsCount;i++)
 		   	 {
