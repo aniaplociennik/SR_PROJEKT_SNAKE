@@ -8,15 +8,15 @@ static Cell Apple ={
 	.x = 5,
 	.y = 10,
 };
-
+//Niebieski owoc pomniejszajacy weza
 static Cell Berry ={
 	.x = 30,
 	.y = 40,
 };
 
-int points=0;
-static int only3=0;
-static int pomocnicza=0;
+int points=0; //Punkty rozgrywki
+static int only8=0; //Zmienna odpowiadajaca za czestotliwosc pojawiania sie "specjalnego owoca"(Berry)
+volatile int pomocnicza=1;//Flaga ustawiana po wygenerowaniu specjalnego owoca (Berry)
 
 //Funkcja inicjalizujaca oraz wyswietlajaca weza na ekranie
 void initSnake(void)
@@ -34,10 +34,9 @@ void initSnake(void)
 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
 	}
 	ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,RED);
-	ssd1331_draw_circle(Berry.x,Berry.y,SNAKE_RAD,BLUE);
 	ssd1331_draw_line(0, 52, 95, 52, BLACK);
 	ssd1331_draw_line(0, 53, 95, 53, BLACK);
-	ssd1331_display_string(3, 54, "Points:", FONT_1206, GREEN);
+	ssd1331_display_string(3, 54, (const uint8_t*)"Points:", FONT_1206, GREEN);
 	ssd1331_display_num(31, 54, 0, sizeof(int), FONT_1206, WHITE);
 }
 //Fukcja odpowiada za poruszanie wezem
@@ -78,7 +77,7 @@ void MoveSnake(uint8_t direction)
 		break;
 		case up:
 		   	 snake.head.y -= SNAKE_STEP;
-		   	 snake.head.y %= 52;//Jesli wyjedzie za gorna krawedz ekranu wyjedz dolna krawedzia ekranu[snake.head.y=127%64+1 = 64->dolna krawedz ekranu]
+		   	 snake.head.y %= 52;//Jesli wyjedzie za gorna krawedz ekranu wyjedz dolna krawedzia ekranu
 		   	 ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
 		   	 for(i=1;i<partsCount;i++)
 		   	 {
@@ -88,7 +87,7 @@ void MoveSnake(uint8_t direction)
 		break;
 		case down:
 			 snake.head.y += SNAKE_STEP;
-			 snake.head.y %= 52;//Jesli wyjedzie za dolna krawedz ekranu wyjedz gorna krawedzia ekranu[snake.head.y=64%64 = 0->gorna krawedz ekranu]
+			 snake.head.y %= 52;//Jesli wyjedzie za dolna krawedz ekranu wyjedz gorna krawedzia ekranu[snake.head.y=52%52 = 0->gorna krawedz ekranu]
 		   	 ssd1331_draw_circle(snake.head.x,snake.head.y,SNAKE_RAD,YELLOW);
 		   	 for(i=1;i<partsCount;i++)
 		   	 {
@@ -99,7 +98,8 @@ void MoveSnake(uint8_t direction)
 	}
 
 	omnomnom();
-	if(pomocnicza==0) zjedzBerry();
+	if(pomocnicza==0)
+		zjedzBerry();
 }
 //Funkcja sprawdza czy nastpila kolizja glowy weza z reszta jego ciala-> zwraca "true" jesli nastapila kolizja
 bool checkCollision(){
@@ -139,17 +139,17 @@ void omnomnom()
 		ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, WHITE);
 		printf("You ate Apple! \r\n");
 
-		only3++;
-		if(only3==3) {
-			only3=0;
+		++only8;
+		if(only8==8) {
+			only8=0;
 			wyswietlBerry();
 		}
 	}
 }
 
 void wyswietlBerry(){
-				ssd1331_draw_circle(Berry.x,Berry.y,SNAKE_RAD,BLUE);
-				pomocnicza=0;
+	ssd1331_draw_circle(Berry.x,Berry.y,SNAKE_RAD,BLUE);
+	pomocnicza=0;
 }
 
 void zjedzBerry(){
@@ -159,22 +159,22 @@ void zjedzBerry(){
 				ssd1331_draw_circle(Berry.x,Berry.y,SNAKE_RAD,GREEN_BACKGROUND);
 				ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, GREEN_BACKGROUND);
 				ssd1331_draw_circle(snake.snakeParts[snake.size-1].x,snake.snakeParts[snake.size-1].y,SNAKE_RAD,GREEN_BACKGROUND);
-				snake.size--;
+				--snake.size;
 				points+=2;
 				Berry.x = rand()%80;
 				Berry.y = rand()%54;
 				for(int i=1; i<snake.size; i++)
 				{
-					if((Berry.x-SNAKE_STEP<snake.snakeParts[i].x)&&(snake.snakeParts[i].x<Berry.x+SNAKE_STEP) //gdyby jabluszko mialo byc na ogonie weza nowe wartosci wspolrzednych
+					if((Berry.x-SNAKE_STEP<snake.snakeParts[i].x)&&(snake.snakeParts[i].x<Berry.x+SNAKE_STEP) //gdyby Berry mialo byc na ogonie weza nowe wartosci wspolrzednych
 						&&(Berry.y-SNAKE_STEP<snake.snakeParts[i].y)&&(snake.snakeParts[i].y<Berry.y+SNAKE_STEP)
-						|| Apple.x==Berry.x && Apple.y==Berry.y)
+						&& (Apple.x==Berry.x && Apple.y==Berry.y))
 					{Berry.x = rand()%80;
 					Berry.y = rand()%54;}
 				}
 				ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, WHITE);
 				printf("You ate Berry! \r\n");
+				pomocnicza=1;
 			}
-	pomocnicza==1;
 }
 
 int Points()

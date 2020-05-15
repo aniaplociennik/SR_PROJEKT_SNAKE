@@ -65,7 +65,7 @@ void SystemClock_Config(void);
 void initPlay(void)
 {		ssd1331_init();
     	ssd1331_clear_screen(GREEN_BACKGROUND);
-    	ssd1331_display_string(20, 0, "Sssnake", FONT_1608, GREEN);
+    	ssd1331_display_string(20, 0, (const uint8_t*)"Sssnake", FONT_1608, GREEN);
     	ssd1331_draw_circle(37,23,SNAKE_RAD, GREEN_SNAKE);
     	ssd1331_draw_circle(41,23,SNAKE_RAD, GREEN_SNAKE);
     	ssd1331_draw_circle(45,23,SNAKE_RAD, GREEN_SNAKE);
@@ -78,8 +78,8 @@ void initPlay(void)
     	ssd1331_draw_circle(53,35,SNAKE_RAD, GREEN_SNAKE);
     	ssd1331_draw_circle(49,35,SNAKE_RAD, YELLOW);
     	ssd1331_draw_circle(37,35,SNAKE_RAD, RED);
-        ssd1331_display_string(20, 39, "Click blue", FONT_1206, GREEN);
-        ssd1331_display_string(5, 51, "button to play", FONT_1206, GREEN);
+        ssd1331_display_string(20, 39, (const uint8_t*)"Click blue", FONT_1206, GREEN);
+        ssd1331_display_string(5, 51, (const uint8_t*)"button to play", FONT_1206, GREEN);
 }
 //Funkcja sprawdza czy nastapila kolizja -> jesli tak wyswietla komunikat na ekranie i przerywa petle while
 bool IsGameOver()
@@ -87,9 +87,9 @@ bool IsGameOver()
 	//Sprawdza funkcje odpowiadajaca za kolizje weza, funkcja zwraca "true" jesli nastapilo zderzenie weza
 	if(checkCollision()){
 		ssd1331_clear_screen(GREEN_BACKGROUND);
-		ssd1331_display_string(20, 10, "GAME OVER!", FONT_1206, WHITE);
-		ssd1331_display_string(5, 20, "You received", FONT_1206, WHITE);
-		ssd1331_display_string(30, 30, "points!", FONT_1206, WHITE);
+		ssd1331_display_string(20, 10, (const uint8_t*)"GAME OVER!", FONT_1206, WHITE);
+		ssd1331_display_string(5, 20, (const uint8_t*)"You received", FONT_1206, WHITE);
+		ssd1331_display_string(30, 30, (const uint8_t*)"points!", FONT_1206, WHITE);
 		int points=Points();
 		ssd1331_display_num(70, 20, points, sizeof(int), FONT_1206, WHITE);
 
@@ -175,16 +175,16 @@ int main(void)
 
  while (!IsGameOver())
  {
-	  if(Joystick[0]>Thresholdup){//Jesli joystick do gory
+	  if(Joystick[0]>Thresholdup && dir_flag!=down){//Jesli joystick do gory i nie w dol
 		  dir_flag=up;
 	  }
-	  else if(Joystick[0]<Thresholddown){//Joystic wychylony w dol
+	  else if(Joystick[0]<Thresholddown && dir_flag!=up){//Joystic wychylony w dol i nie w gore
 		  dir_flag=down;
 	  }
-	  else if(Joystick[1]>Thresholdup){//Joystic wychylony w prawo
+	  else if(Joystick[1]>Thresholdup && dir_flag!=left){//Joystic wychylony w prawo i nie w lewo
 		  dir_flag=right;
 	  }
-	  else if(Joystick[1]<Thresholddown){//Joystic wychylony w lewo
+	  else if(Joystick[1]<Thresholddown && dir_flag!=right){//Joystic wychylony w lewo i nie w prawo
 		  dir_flag=left;
 	  }
 	  //Jesli timer sie przeterminowal (czestotliwosc 5HZ)
