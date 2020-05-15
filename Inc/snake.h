@@ -36,5 +36,7 @@ void MoveSnake(uint8_t direction);
 bool checkCollision();
 
 void omnomnom();
-
+void zjedzBerry();
+void wyswietlBerry();
+int Points();
 #endif// SNAKE_H

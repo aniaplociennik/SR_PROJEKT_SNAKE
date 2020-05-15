@@ -9,7 +9,14 @@ static Cell Apple ={
 	.y = 10,
 };
 
-int points;
+static Cell Berry ={
+	.x = 30,
+	.y = 40,
+};
+
+int points=0;
+static int only3=0;
+static int pomocnicza=0;
 
 //Funkcja inicjalizujaca oraz wyswietlajaca weza na ekranie
 void initSnake(void)
@@ -27,6 +34,7 @@ void initSnake(void)
 		ssd1331_draw_circle(snake.snakeParts[i].x,snake.snakeParts[i].y,SNAKE_RAD, GREEN_SNAKE);
 	}
 	ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,RED);
+	ssd1331_draw_circle(Berry.x,Berry.y,SNAKE_RAD,BLUE);
 	ssd1331_draw_line(0, 52, 95, 52, BLACK);
 	ssd1331_draw_line(0, 53, 95, 53, BLACK);
 	ssd1331_display_string(3, 54, "Points:", FONT_1206, GREEN);
@@ -91,7 +99,7 @@ void MoveSnake(uint8_t direction)
 	}
 
 	omnomnom();
-
+	if(pomocnicza==0) zjedzBerry();
 }
 //Funkcja sprawdza czy nastpila kolizja glowy weza z reszta jego ciala-> zwraca "true" jesli nastapila kolizja
 bool checkCollision(){
@@ -99,7 +107,7 @@ bool checkCollision(){
 	{
 		if((snake.snakeParts[i].x-SNAKE_STEP<snake.head.x)&&(snake.head.x<snake.snakeParts[i].x+SNAKE_STEP)
 			&&(snake.snakeParts[i].y-SNAKE_STEP<snake.head.y)&&(snake.head.y<snake.snakeParts[i].y+SNAKE_STEP)){
-			points= snake.size-SNAKE_INIT_SIZE;
+			//points= snake.size-SNAKE_INIT_SIZE;
 			printf("You received %d points! \r\n", points);
 			return true;
 		}
@@ -114,10 +122,9 @@ void omnomnom()
 			&&(Apple.y-SNAKE_STEP<snake.head.y)&&(snake.head.y<Apple.y+SNAKE_STEP))
 	{
 		ssd1331_draw_circle(Apple.x,Apple.y,SNAKE_RAD,GREEN_BACKGROUND);
-		points= snake.size-SNAKE_INIT_SIZE;
 		ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, GREEN_BACKGROUND);
 		snake.size++;
-		points= snake.size-SNAKE_INIT_SIZE;
+		points+=1;
 		Apple.x = rand()%80;
 		Apple.y = rand()%54;
 		for(int i=1; i<snake.size; i++)
@@ -131,7 +138,43 @@ void omnomnom()
 		//ssd1331_display_string(3, 54, "Points:", FONT_1206, GREEN);
 		ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, WHITE);
 		printf("You ate Apple! \r\n");
+
+		only3++;
+		if(only3==3) {
+			only3=0;
+			wyswietlBerry();
+		}
 	}
+}
+
+void wyswietlBerry(){
+				ssd1331_draw_circle(Berry.x,Berry.y,SNAKE_RAD,BLUE);
+				pomocnicza=0;
+}
+
+void zjedzBerry(){
+	if((Berry.x-SNAKE_STEP<snake.head.x)&&(snake.head.x<Berry.x+SNAKE_STEP)
+					&&(Berry.y-SNAKE_STEP<snake.head.y)&&(snake.head.y<Berry.y+SNAKE_STEP))
+			{
+				ssd1331_draw_circle(Berry.x,Berry.y,SNAKE_RAD,GREEN_BACKGROUND);
+				ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, GREEN_BACKGROUND);
+				ssd1331_draw_circle(snake.snakeParts[snake.size-1].x,snake.snakeParts[snake.size-1].y,SNAKE_RAD,GREEN_BACKGROUND);
+				snake.size--;
+				points+=2;
+				Berry.x = rand()%80;
+				Berry.y = rand()%54;
+				for(int i=1; i<snake.size; i++)
+				{
+					if((Berry.x-SNAKE_STEP<snake.snakeParts[i].x)&&(snake.snakeParts[i].x<Berry.x+SNAKE_STEP) //gdyby jabluszko mialo byc na ogonie weza nowe wartosci wspolrzednych
+						&&(Berry.y-SNAKE_STEP<snake.snakeParts[i].y)&&(snake.snakeParts[i].y<Berry.y+SNAKE_STEP)
+						|| Apple.x==Berry.x && Apple.y==Berry.y)
+					{Berry.x = rand()%80;
+					Berry.y = rand()%54;}
+				}
+				ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, WHITE);
+				printf("You ate Berry! \r\n");
+			}
+	pomocnicza==1;
 }
 
 int Points()
