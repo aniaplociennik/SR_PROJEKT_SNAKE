@@ -1,21 +1,21 @@
 #include "SSD1331.h"//biblioteka wyswietlacza OLED
 #include "snake.h"
 
-static Snake snake;//Stworzenie obiektu typu "Snake"
+ Snake snake;//Stworzenie obiektu typu "Snake"
 
 //Stworzenie jabłuszka
-static Cell Apple ={
+ Cell Apple ={
 	.x = 5,
 	.y = 10,
 };
 //Niebieski owoc pomniejszajacy weza
-static Cell Berry ={
+ Cell Berry ={
 	.x = 30,
 	.y = 40,
 };
 
 int points=0; //Punkty rozgrywki
-static int only8=0; //Zmienna odpowiadajaca za czestotliwosc pojawiania sie "specjalnego owoca"(Berry)
+static int only4=0; //Zmienna odpowiadajaca za czestotliwosc pojawiania sie "specjalnego owoca"(Berry)
 volatile int pomocnicza=1;//Flaga ustawiana po wygenerowaniu specjalnego owoca (Berry)
 
 //Funkcja inicjalizujaca oraz wyswietlajaca weza na ekranie
@@ -139,9 +139,9 @@ void omnomnom()
 		ssd1331_display_num(31, 54, points, sizeof(int), FONT_1206, WHITE);
 		printf("You ate Apple! \r\n");
 
-		++only8;
-		if(only8==8) {
-			only8=0;
+		++only4;
+		if(only4==4) {
+			only4=0;
 			wyswietlBerry();
 		}
 	}

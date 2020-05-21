@@ -1,7 +1,7 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
-#define SNAKE_LIMIT 40
+#define SNAKE_LIMIT 100
 #define SNAKE_INIT_SIZE 5
 #define SNAKE_RAD 2//Promien czesci weza
 
